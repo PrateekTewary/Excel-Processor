@@ -33,16 +33,37 @@ class ExcelProcessor
                 {
                     var newSheet = tempWorkBook.Worksheets.Add(year);
                     newSheet.Cell(1, 1).Value = "Timestamp"; // Add headers
+                    newSheet.Cell(1, 1).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+
                     newSheet.Cell(1, 2).Value = "Email Address"; // Assuming Name in column 2
+                    newSheet.Cell(1, 2).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 3).Value = "Name";
+                    newSheet.Cell(1, 3).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 4).Value = "Course";
+                    newSheet.Cell(1, 4).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 5).Value = "Course Completion Year";
+                    newSheet.Cell(1, 5).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 6).Value = "Institute Roll Number";
+                    newSheet.Cell(1, 6).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 7).Value = "Contact Number";
+                    newSheet.Cell(1, 7).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 8).Value = "Personal Email";
+                    newSheet.Cell(1, 8).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 9).Value = "LinkedIn Profile URL";
+                    newSheet.Cell(1, 9).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 10).Value = "Current Organization (Company/University)";
+                    newSheet.Cell(1, 10).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
+                    
                     newSheet.Cell(1, 11).Value = "Current Position";
+                    newSheet.Cell(1, 11).Style.Font.SetFontSize(15).Font.SetFontName("Roboto").Fill.SetBackgroundColor(XLColor.Blue).Font.Bold = true;
                 }
 
                 var outputSheet = tempWorkBook.Worksheet(year);
@@ -59,6 +80,7 @@ class ExcelProcessor
                 outputSheet.Cell(newRow, 9).Value = inputSheet.Cell(row, 9).Value;
                 outputSheet.Cell(newRow, 10).Value =inputSheet.Cell(row, 10).Value;
                 outputSheet.Cell(newRow, 11).Value =inputSheet.Cell(row, 11).Value;
+                outputSheet.Columns().AdjustToContents();
             }
 
 
