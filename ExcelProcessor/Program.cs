@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.IO;
+using System.Linq;
 using ClosedXML.Excel;
 class ExcelProcessor
 {
@@ -18,7 +19,7 @@ class ExcelProcessor
         using (var workbook = new XLWorkbook(inputFilePath))
         {
             var inputSheet = workbook.Worksheet(1);
-            var outputWorkbook = new XLWorkbook();
+            var tempWorkBook = new XLWorkbook();
             int lastRow = inputSheet.LastRowUsed().RowNumber();
 
             for (int row = 2; row <= lastRow; row++)  // Assuming row 1 is header
@@ -28,9 +29,9 @@ class ExcelProcessor
                 string yearSuffix = rollNumber.Split('/')[2]; // Extract year (last two digits)
                 string year = "20" + yearSuffix; // Convert to full year (e.g., 19 -> 2019)
 
-                if (!outputWorkbook.Worksheets.Contains(year))
+                if (!tempWorkBook.Worksheets.Contains(year))
                 {
-                    var newSheet = outputWorkbook.Worksheets.Add(year);
+                    var newSheet = tempWorkBook.Worksheets.Add(year);
                     newSheet.Cell(1, 1).Value = "Timestamp"; // Add headers
                     newSheet.Cell(1, 2).Value = "Email Address"; // Assuming Name in column 2
                     newSheet.Cell(1, 3).Value = "Name";
@@ -44,7 +45,7 @@ class ExcelProcessor
                     newSheet.Cell(1, 11).Value = "Current Position";
                 }
 
-                var outputSheet = outputWorkbook.Worksheet(year);
+                var outputSheet = tempWorkBook.Worksheet(year);
                 int newRow = outputSheet.LastRowUsed()?.RowNumber() + 1 ?? 2;
 
                 outputSheet.Cell(newRow, 1).Value = inputSheet.Cell(row, 1).Value;
@@ -60,8 +61,24 @@ class ExcelProcessor
                 outputSheet.Cell(newRow, 11).Value =inputSheet.Cell(row, 11).Value;
             }
 
-            outputWorkbook.SaveAs(outputFilePath);
-            Console.WriteLine($"Processed data saved to {outputFilePath}");
+
+            // Sort sheets by name (year) and create a new final workbook
+            var sortedYears = tempWorkBook.Worksheets
+                                          .Select(ws => ws.Name)
+                                          .OrderBy(year => int.Parse(year))
+                                          .ToList();
+
+             using (var finalWorkbook = new XLWorkbook())
+            {
+                foreach (var year in sortedYears)
+                {
+                    tempWorkBook.Worksheet(year).CopyTo(finalWorkbook, year);
+                }
+
+                finalWorkbook.SaveAs(outputFilePath);
+            }
+
+            Console.WriteLine($"Processed data saved to {outputFilePath} with sorted sheets.");
         }
     }
 }
